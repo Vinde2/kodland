@@ -1,41 +1,21 @@
-# Import
-from flask import Flask, render_template
+import discord
+from discord.ext import commands
 
+intents = discord.Intents.default()
+intents.message_content = True
 
-app = Flask(__name__)
+bot = commands.Bot(command_prefix='$', intents=intents)
 
+@bot.event
+async def on_ready():
+    print(f'Zalogowaliśmy się jako {bot.user}')
 
-# Pierwsza strona
-@app.route('/')
-def index():
-    return render_template('index.html')
+@bot.command()
+async def hello(ctx):
+    await ctx.send(f'Cześć! Jestem botem, {bot.user}!')
 
-# Druga strona
-@app.route('/<size>')
-def lights(size):
-    return render_template(
-                            'lights.html', 
-                            size=size
-                           )
+@bot.command()
+async def heh(ctx, count_heh = 5):
+    await ctx.send("he" * count_heh)
 
-# Trzecia strona
-@app.route('/<size>/<lights>')
-def electronics(size, lights):
-    return render_template(
-                            'electronics.html',
-                            size = size, 
-                            lights = lights                           
-                           )
-
-# Obliczenia
-@app.route('/<size>/<lights>/<device>' , methods = ['POST'])
-def end(size, lights, device):
-    projectpath = request.form['kontakt-tn']
-    
-    return render_template('end.html', 
-                          
-                            
-                           
-                                                    )
-
-app.run(debug=True)
+bot.run("TOKEN")
